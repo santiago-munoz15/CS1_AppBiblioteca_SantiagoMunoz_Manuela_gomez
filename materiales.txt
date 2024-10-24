@@ -1,0 +1,21 @@
+Identificador: asda
+Tipo de Material: asda
+Título: asdas
+Fecha de Registro: 23
+Cantidad Registrada: 3
+Cantidad Actual: 4
+---------------------------------------
+Identificador: ABC
+Tipo de Material: Matematicas
+Título: Libro
+Fecha de Registro: 22/23/2024
+Cantidad Registrada: 4
+Cantidad Actual: 3
+---------------------------------------
+Identificador: ABC
+Tipo de Material: Programacion
+Título: Revista
+Fecha de Registro: 22/2/2024
+Cantidad Registrada: 4
+Cantidad Actual: 3
+---------------------------------------

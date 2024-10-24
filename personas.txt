@@ -1,0 +1,21 @@
+Cedula: 1035869986
+Nombre 1: : Santiago
+Nombre 2: 
+Apellido 1: Munoz
+Apellido 2: Zapata
+Rol: Estudiante
+---------------------------------------
+Cedula: 15506398
+Nombre 1: : Jairo
+Nombre 2: Jesus
+Apellido 1: Munoz
+Apellido 2: Gomez
+Rol: Docente
+---------------------------------------
+Cedula: 1152695304
+Nombre 1: : Kelly
+Nombre 2: yesenia
+Apellido 1: Jaraba
+Apellido 2: Cuartas
+Rol: Administradora
+---------------------------------------
