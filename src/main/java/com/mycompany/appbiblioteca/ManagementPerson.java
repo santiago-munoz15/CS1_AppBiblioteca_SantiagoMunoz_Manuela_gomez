@@ -4,6 +4,9 @@
  */
 package com.mycompany.appbiblioteca;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Scanner;
 
 /**
@@ -23,29 +26,59 @@ public class ManagementPerson {
     //Metodo para ingresar una person
     public Person[][] addPerson() {
 
-        System.out.print("Ingrese el numero de ID: ");
-        String ID = sc.nextLine();
-        System.out.print("Ingrese el nombre 1: ");
-        String name1 = sc.nextLine();
-        System.out.print("Ingrese el nombre 2: ");
-        String name2 = sc.nextLine();
-        System.out.print("Ingrese el apellido 1: ");
-        String lastName1 = sc.nextLine();
-        System.out.print("Ingrese el apellido 2: ");
-        String lastName2 = sc.nextLine();
-        System.out.print("Ingrese el rol de la persona: ");
-        String role = sc.nextLine();
-
-        person = new Person(ID, name1, name2, lastName1, lastName2, role);
-
-        for (int i = 0; i < this.mPerson.length; i++) {
-            Person idPerson = this.mPerson[i][0];
-            if (idPerson == null) {
-                this.mPerson[i][0] = person;
-                System.out.println("\nGuardado exitosamente");
-                break;
+        try {
+            System.out.print("Ingrese el numero de ID: ");
+            String ID = sc.nextLine();
+            if (ID.trim().isEmpty()) {
+                System.out.println("Error: El ID no puede estar vacío.");
+                return this.mPerson;
             }
+
+            System.out.print("Ingrese el nombre 1: ");
+            String name1 = sc.nextLine();
+            if (name1.trim().isEmpty()) {
+                System.out.println("Error: El nombre no puede estar vacío.");
+                return this.mPerson;
+            }
+
+            System.out.print("Ingrese el nombre 2: ");
+            String name2 = sc.nextLine();
+
+            System.out.print("Ingrese el apellido 1: ");
+            String lastName1 = sc.nextLine();
+            if (lastName1.trim().isEmpty()) {
+                System.out.println("Error: El apellido no puede estar vacío.");
+                return this.mPerson;
+            }
+
+            System.out.print("Ingrese el apellido 2: ");
+            String lastName2 = sc.nextLine();
+
+            System.out.print("Ingrese el rol de la persona: ");
+            String role = sc.nextLine();
+            if (role.trim().isEmpty()) {
+                System.out.println("Error: El rol no puede estar vacío.");
+                return this.mPerson;
+            }
+
+            person = new Person(ID, name1, name2, lastName1, lastName2, role);
+
+            for (int i = 0; i < this.mPerson.length; i++) {
+                Person idPerson = this.mPerson[i][0];
+                if (idPerson == null) {
+                    this.mPerson[i][0] = person;
+                    System.out.println("\nGuardado exitosamente");
+
+                    // Guardar en archivo después de agregar la persona
+                    savePersonToFile(person);
+
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Ocurrió un error al ingresar la persona: " + e.getMessage());
         }
+
         return this.mPerson;
 
     }
@@ -64,88 +97,118 @@ public class ManagementPerson {
 
     //Metodo para Eliminar una person buscandola con el numero de ID
     public void deletePerson() {
-        System.out.print("Ingrese el numero de ID de la persona a eliminar: ");
-        String ID = sc.nextLine();
+        try {
+            System.out.print("Ingrese el numero de ID de la persona a eliminar: ");
+            String ID = sc.nextLine();
 
-        boolean found = false;
+            boolean found = false;
 
-        for (int i = 0; i < this.mPerson.length; i++) {
-            Person idPerson = this.mPerson[i][0];
+            for (int i = 0; i < this.mPerson.length; i++) {
+                Person idPerson = this.mPerson[i][0];
 
-            if (idPerson != null && idPerson.getId().equals(ID)) {
-                this.mPerson[i][0] = null;  // Eliminar la person al poner el valor en null
-                System.out.println("Persona con ID " + ID + " eliminada exitosamente.");
-                found = true;
-                break;
+                if (idPerson != null && idPerson.getId().equals(ID)) {
+                    this.mPerson[i][0] = null;
+                    System.out.println("Persona con ID " + ID + " eliminada exitosamente.");
+                    found = true;
+                    break;
+                }
             }
-        }
 
-        if (!found) {
-            System.out.println("Persona con ID " + ID + " no encontrada.");
+            if (!found) {
+                System.out.println("Persona con ID " + ID + " no encontrada.");
+            }
+        } catch (Exception e) {
+            System.out.println("Ocurrió un error al eliminar la persona: " + e.getMessage());
         }
     }
 
     //Metodo para actualizar una person con el numero de ID
     public void updatePerson() {
-        System.out.print("Ingrese el numero de ID de la person a actualizar: ");
-        String ID = sc.nextLine();
+        try {
+            System.out.print("Ingrese el numero de ID de la person a actualizar: ");
+            String ID = sc.nextLine();
 
-        boolean found = false;
+            boolean found = false;
 
-        // Buscar la persona por la cedula
-        for (int i = 0; i < this.mPerson.length; i++) {
-            Person idPerson = this.mPerson[i][0];
+            for (int i = 0; i < this.mPerson.length; i++) {
+                Person idPerson = this.mPerson[i][0];
 
-            if (idPerson != null && idPerson.getId().equals(ID)) {
-                found = true;
+                if (idPerson != null && idPerson.getId().equals(ID)) {
+                    found = true;
 
-                // Mostrar los datos actuales de la person
-                System.out.print("Datos actuales:");
-                System.out.print("Nombre 1: " + idPerson.getName1());
-                System.out.print("Nombre 2: " + idPerson.getName2());
-                System.out.print("Apellido 1: " + idPerson.getLastName1());
-                System.out.print("Apellido 2: " + idPerson.getLastName2());
-                System.out.print("Rol: " + idPerson.getRole());
+                    // Mostrar los datos actuales de la person
+                    System.out.println("Datos actuales:");
+                    System.out.println("Nombre 1: " + idPerson.getName1());
+                    System.out.println("Nombre 2: " + idPerson.getName2());
+                    System.out.println("Apellido 1: " + idPerson.getLastName1());
+                    System.out.println("Apellido 2: " + idPerson.getLastName2());
+                    System.out.println("Rol: " + idPerson.getRole());
 
-                // Actualizar los datos
-                //Se solicita ingresar un nuevo dato y se añade con el .setNombre
-                System.out.print("Ingrese el nuevo nombre 1 (dejar en blanco para no modificar): ");
-                String newName1 = sc.nextLine();
-                if (!newName1.isEmpty()) { // is.Empty verifica si una cadena existe pero no contiene caracteres
-                    idPerson.setName1(newName1);
+                    // Actualizar los datos
+                    System.out.print("Ingrese el nuevo nombre 1 (dejar en blanco para no modificar): ");
+                    String newName1 = sc.nextLine();
+                    if (!newName1.trim().isEmpty()) {
+                        idPerson.setName1(newName1);
+                    }
+
+                    System.out.print("Ingrese el nuevo nombre 2 (dejar en blanco para no modificar): ");
+                    String newName2 = sc.nextLine();
+                    if (!newName2.trim().isEmpty()) {
+                        idPerson.setName2(newName2);
+                    }
+
+                    System.out.print("Ingrese el nuevo apellido 1 (dejar en blanco para no modificar): ");
+                    String newSurname1 = sc.nextLine();
+                    if (!newSurname1.trim().isEmpty()) {
+                        idPerson.setLastName1(newSurname1);
+                    }
+
+                    System.out.print("Ingrese el nuevo apellido 2 (dejar en blanco para no modificar): ");
+                    String newSurname2 = sc.nextLine();
+                    if (!newSurname2.trim().isEmpty()) {
+                        idPerson.setLastName2(newSurname2);
+                    }
+
+                    System.out.print("Ingrese el nuevo rol (dejar en blanco para no modificar): ");
+                    String newRole = sc.nextLine();
+                    if (!newRole.trim().isEmpty()) {
+                        idPerson.setRole(newRole);
+                    }
+
+                    System.out.println("Datos actualizados exitosamente.");
+                    break;
                 }
-
-                System.out.print("Ingrese el nuevo nombre 2 (dejar en blanco para no modificar): ");
-                String newName2 = sc.nextLine();
-                if (!newName2.isEmpty()) { // is.Empty verifica si una cadena existe pero no contiene caracteres
-                    idPerson.setName2(newName2);
-                }
-
-                System.out.print("Ingrese el nuevo apellido 1 (dejar en blanco para no modificar): ");
-                String newSurname1 = sc.nextLine();
-                if (!newSurname1.isEmpty()) { // is.Empty verifica si una cadena existe pero no contiene caracteres
-                    idPerson.setLastName1(newSurname1);
-                }
-
-                System.out.print("Ingrese el nuevo apellido 2 (dejar en blanco para no modificar): ");
-                String newSurname2 = sc.nextLine();
-                if (!newSurname2.isEmpty()) { // is.Empty verifica si una cadena existe pero no contiene caracteres
-                    idPerson.setLastName2(newSurname2);
-                }
-
-                System.out.print("Ingrese el nuevo role (dejar en blanco para no modificar): ");
-                String newRole = sc.nextLine();
-                if (!newRole.isEmpty()) { // is.Empty verifica si una cadena existe pero no contiene caracteres
-                    idPerson.setRole(newRole);
-                }
-
-                System.out.println("Datos actualizados exitosamente.");
-                break;
             }
-        }
 
-        if (!found) {
-            System.out.println("Persona con ID " + ID + " no encontrada.");
+            if (!found) {
+                System.out.println("Persona con ID " + ID + " no encontrada.");
+            }
+        } catch (Exception e) {
+            System.out.println("Ocurrió un error al actualizar la persona: " + e.getMessage());
+        }
+    }
+
+    // Método para guardar la información de la persona en un archivo .txt
+    private void savePersonToFile(Person person) {
+        try (FileWriter fileWriter = new FileWriter("personas.txt", true); PrintWriter printWriter = new PrintWriter(fileWriter)) {
+            fileWriter.write("Cedula: " + person.getId() + "\n");
+            fileWriter.write("Nombre 1: : " + person.getName1() + "\n");
+            fileWriter.write("Nombre 2: " + person.getName2() + "\n");
+            fileWriter.write("Apellido 1: " + person.getLastName1() + "\n");
+            fileWriter.write("Apellido 2: " + person.getLastName2() + "\n");
+            fileWriter.write("Rol: " + person.getRole() + "\n");
+            fileWriter.write("---------------------------------------\n");
+            /*printWriter.println(
+                person.getId() + "," +
+                person.getName1() + "," +
+                person.getName2() + "," +
+                person.getLastName1() + "," +
+                person.getLastName2() + "," +
+                person.getRole()
+            );*/
+            System.out.println("Información guardada en el archivo.");
+        } catch (IOException e) {
+            System.out.println("Ocurrió un error al guardar en el archivo: " + e.getMessage());
         }
     }
 }

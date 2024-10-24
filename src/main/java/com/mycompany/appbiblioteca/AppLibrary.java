@@ -16,7 +16,6 @@ public class AppLibrary {
     static Scanner sc = new Scanner(System.in);
     static Material[][] mMaterial = new Material[6][20];
     static Person[][] mPerson = new Person[6][20];
-    
 
     public static void main(String[] args) {
 
@@ -36,7 +35,17 @@ public class AppLibrary {
             System.out.println("|10. Salir.                                  |");
             System.out.println("|============================================|");
             System.out.print("Ingresa la opcion: ");
-            option = sc.nextInt();
+
+            // Manejo de errores para la opción ingresada
+            try {
+                System.out.print("Ingresa la opcion: ");
+                option = sc.nextInt();
+            } catch (Exception e) {
+                System.out.println("Opción inválida. Por favor, ingresa un número.");
+                sc.next(); // Limpiar entrada
+                continue;
+            }
+
             ManagementMaterials gMateriales = new ManagementMaterials(mMaterial);
             ManagementPerson gPersona = new ManagementPerson(mPerson);
             switch (option) {
@@ -48,6 +57,7 @@ public class AppLibrary {
                     break;
                 case 3:
                     gPersona.deletePerson();// Llama al método directamente eliminar persona
+
                     break;
                 case 4:
                     gPersona.updatePerson();// Llama al método directamente actualizar persona
