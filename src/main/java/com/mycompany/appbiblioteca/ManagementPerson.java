@@ -4,6 +4,7 @@
  */
 package com.mycompany.appbiblioteca;
 
+import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -30,14 +31,14 @@ public class ManagementPerson {
             System.out.print("Ingrese el numero de ID: ");
             String ID = sc.nextLine();
             if (ID.trim().isEmpty()) {
-                System.out.println("Error: El ID no puede estar vacío.");
+                System.out.println("Error: El ID no puede estar vacio.");
                 return this.mPerson;
             }
 
             System.out.print("Ingrese el nombre 1: ");
             String name1 = sc.nextLine();
             if (name1.trim().isEmpty()) {
-                System.out.println("Error: El nombre no puede estar vacío.");
+                System.out.println("Error: El nombre no puede estar vacio.");
                 return this.mPerson;
             }
 
@@ -47,7 +48,7 @@ public class ManagementPerson {
             System.out.print("Ingrese el apellido 1: ");
             String lastName1 = sc.nextLine();
             if (lastName1.trim().isEmpty()) {
-                System.out.println("Error: El apellido no puede estar vacío.");
+                System.out.println("Error: El apellido no puede estar vacio.");
                 return this.mPerson;
             }
 
@@ -57,7 +58,7 @@ public class ManagementPerson {
             System.out.print("Ingrese el rol de la persona: ");
             String role = sc.nextLine();
             if (role.trim().isEmpty()) {
-                System.out.println("Error: El rol no puede estar vacío.");
+                System.out.println("Error: El rol no puede estar vacio.");
                 return this.mPerson;
             }
 
@@ -69,14 +70,14 @@ public class ManagementPerson {
                     this.mPerson[i][0] = person;
                     System.out.println("\nGuardado exitosamente");
 
-                    // Guardar en archivo después de agregar la persona
+                    // Guardar en archivo despues de agregar la persona
                     savePersonToFile(person);
 
                     break;
                 }
             }
         } catch (Exception e) {
-            System.out.println("Ocurrió un error al ingresar la persona: " + e.getMessage());
+            System.out.println("Ocurrio un error al ingresar la persona: " + e.getMessage());
         }
 
         return this.mPerson;
@@ -88,7 +89,7 @@ public class ManagementPerson {
             Person idPerson = this.mPerson[i][0];
 
             if (idPerson != null) {
-                System.out.println("Cedula: " + idPerson.getId() + " Nombre1: " + idPerson.getName1() + " Nombre 2: " + idPerson.getName2() + " Apellido1: " + idPerson.getLastName1() + " Apellido2: " + idPerson.getLastName2() + " Rol: " + idPerson.getRole());
+                System.out.println("Cedula: " + idPerson.getID() + " Nombre1: " + idPerson.getName1() + " Nombre 2: " + idPerson.getName2() + " Apellido1: " + idPerson.getLastName1() + " Apellido2: " + idPerson.getLastName2() + " Rol: " + idPerson.getRole());
 
             }
         }
@@ -106,10 +107,12 @@ public class ManagementPerson {
             for (int i = 0; i < this.mPerson.length; i++) {
                 Person idPerson = this.mPerson[i][0];
 
-                if (idPerson != null && idPerson.getId().equals(ID)) {
+                if (idPerson != null && idPerson.getID().equals(ID)) {
                     this.mPerson[i][0] = null;
                     System.out.println("Persona con ID " + ID + " eliminada exitosamente.");
                     found = true;
+                    // Sobrescribir el archivo despues de eliminar la persona
+                    overwritePersonFile();
                     break;
                 }
             }
@@ -118,7 +121,7 @@ public class ManagementPerson {
                 System.out.println("Persona con ID " + ID + " no encontrada.");
             }
         } catch (Exception e) {
-            System.out.println("Ocurrió un error al eliminar la persona: " + e.getMessage());
+            System.out.println("Ocurrio un error al eliminar la persona: " + e.getMessage());
         }
     }
 
@@ -133,7 +136,7 @@ public class ManagementPerson {
             for (int i = 0; i < this.mPerson.length; i++) {
                 Person idPerson = this.mPerson[i][0];
 
-                if (idPerson != null && idPerson.getId().equals(ID)) {
+                if (idPerson != null && idPerson.getID().equals(ID)) {
                     found = true;
 
                     // Mostrar los datos actuales de la person
@@ -176,6 +179,8 @@ public class ManagementPerson {
                     }
 
                     System.out.println("Datos actualizados exitosamente.");
+                    // Sobrescribir el archivo despues de actualizar los datos
+                    overwritePersonFile();
                     break;
                 }
             }
@@ -184,14 +189,14 @@ public class ManagementPerson {
                 System.out.println("Persona con ID " + ID + " no encontrada.");
             }
         } catch (Exception e) {
-            System.out.println("Ocurrió un error al actualizar la persona: " + e.getMessage());
+            System.out.println("Ocurrio un error al actualizar la persona: " + e.getMessage());
         }
     }
 
-    // Método para guardar la información de la persona en un archivo .txt
+    // Metodo para guardar la informacion de la persona en un archivo .txt
     private void savePersonToFile(Person person) {
         try (FileWriter fileWriter = new FileWriter("personas.txt", true); PrintWriter printWriter = new PrintWriter(fileWriter)) {
-            fileWriter.write("Cedula: " + person.getId() + "\n");
+            fileWriter.write("Cedula: " + person.getID() + "\n");
             fileWriter.write("Nombre 1: : " + person.getName1() + "\n");
             fileWriter.write("Nombre 2: " + person.getName2() + "\n");
             fileWriter.write("Apellido 1: " + person.getLastName1() + "\n");
@@ -206,9 +211,30 @@ public class ManagementPerson {
                 person.getLastName2() + "," +
                 person.getRole()
             );*/
-            System.out.println("Información guardada en el archivo.");
+            System.out.println("Informacion guardada en el archivo.");
         } catch (IOException e) {
-            System.out.println("Ocurrió un error al guardar en el archivo: " + e.getMessage());
+            System.out.println("Ocurrio un error al guardar en el archivo: " + e.getMessage());
+        }
+    }
+
+    // Metodo para sobrescribir el archivo con la informacion actualizada de la matriz de personas
+    private void overwritePersonFile() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("personas.txt"))) {
+            for (int i = 0; i < this.mPerson.length; i++) {
+                Person person = this.mPerson[i][0];
+                if (person != null) {
+                    writer.write("Cedula: " + person.getID() + "\n");
+                    writer.write("Nombre 1: " + person.getName1() + "\n");
+                    writer.write("Nombre 2: " + person.getName2() + "\n");
+                    writer.write("Apellido 1: " + person.getLastName1() + "\n");
+                    writer.write("Apellido 2: " + person.getLastName2() + "\n");
+                    writer.write("Rol: " + person.getRole() + "\n");
+                    writer.write("---------------------------------------\n");
+                }
+            }
+            System.out.println("Archivo actualizado correctamente.");
+        } catch (IOException e) {
+            System.out.println("Ocurrio un error al sobrescribir el archivo: " + e.getMessage());
         }
     }
 }

@@ -34,14 +34,14 @@ public class AppLibrary {
             System.out.println("|9. Consultar historial de Personas.         |");
             System.out.println("|10. Salir.                                  |");
             System.out.println("|============================================|");
-            System.out.print("Ingresa la opcion: ");
 
-            // Manejo de errores para la opción ingresada
+            // Manejo de errores para la opcion ingresada
             try {
                 System.out.print("Ingresa la opcion: ");
                 option = sc.nextInt();
+                sc.nextLine(); // Limpiar el buffer
             } catch (Exception e) {
-                System.out.println("Opción inválida. Por favor, ingresa un número.");
+                System.out.println("Opcion invalida. Por favor, ingresa un numero.");
                 sc.next(); // Limpiar entrada
                 continue;
             }
@@ -56,26 +56,27 @@ public class AppLibrary {
                     mPerson = gPersona.addPerson();
                     break;
                 case 3:
-                    gPersona.deletePerson();// Llama al método directamente eliminar persona
-
+                    gPersona.deletePerson(); // Llama al metodo directamente eliminar persona
                     break;
                 case 4:
-                    gPersona.updatePerson();// Llama al método directamente actualizar persona
+                    gPersona.updatePerson(); // Llama al metodo directamente actualizar persona
                     break;
                 case 5:
-                    gMateriales.registerLoan(); // Llama al método directamente registrar un prestamo
+                    System.out.print("Ingrese el identificador del material a prestar: ");
+                    String identifier = sc.nextLine();
+                    gMateriales.registerLoan(identifier); // Llama al metodo con el identificador ingresado
                     break;
                 case 6:
-                    gMateriales.registerReturn(); // Llama al método directamente registrar devolucion
+                    gMateriales.registerReturn(); // Llama al metodo directamente registrar devolucion
                     break;
                 case 7:
-                    gMateriales.registerRenewal(); // Llama al método directamente registrar renovacion
+                    gMateriales.registerRenewal(); // Llama al metodo directamente registrar renovacion
                     break;
                 case 8:
-                    gMateriales.consultBooks();// Llama al metodo para consultar el historial de libros
+                    gMateriales.consultBooks(); // Llama al metodo para consultar el historial de libros
                     break;
                 case 9:
-                    gPersona.personQuery();// Llama al metodo para consultar las personas ingresadas
+                    gPersona.personQuery(); // Llama al metodo para consultar las personas ingresadas
                     break;
                 case 10:
                     System.out.println("Saliendo...");

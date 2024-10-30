@@ -13,7 +13,7 @@ import java.util.Scanner;
  *
  * @author santiago.munoz
  */
-public class ManagementMaterials {
+public class ManagementMaterials implements Loanable {
 
     private Material[][] mMaterial;
     Scanner sc = new Scanner(System.in);
@@ -57,7 +57,7 @@ public class ManagementMaterials {
             if (idMaterial == null) {
                 this.mMaterial[i][0] = material;
                 saveMaterialToFile(material); // Llamar al metodo para guardar en archivo
-                System.out.println("Material añadido y guardado exitosamente.");
+                System.out.println("\nMaterial añadido y guardado exitosamente.");
                 break;
             }
         }
@@ -65,33 +65,30 @@ public class ManagementMaterials {
     }
 
     //Metod para Registrar un prestado consultando en la matriz con el identifier del material
-    public void registerLoan() {
-        // Usar Scanner para pedir el identifier dentro del metodo
-        try {
-            System.out.print("Ingrese el identificador del material para registrar el prestamo: ");
-            String identifier = sc.nextLine();
+    @Override
+    public void registerLoan(String identifier) {
 
+        try {
             boolean found = false;
             for (int i = 0; i < this.mMaterial.length; i++) {
                 Material material = this.mMaterial[i][0];
                 if (material != null && material.getIdentifier().equals(identifier)) {
                     if (material.getCurrentQuantity() > 0) {
                         material.setCurrentQuantity(material.getCurrentQuantity() - 1);
-                        System.out.println("Prestamo registrado exitosamente. Se actualiza la cantidad disponible.");
+                        System.out.println("Prestamo registrado exitosamente.");
+                        found = true;
+                        overwriteMaterialFile(); // Actualizar archivo
                     } else {
-                        System.out.println("No hay suficientes unidades disponibles para el prestamo.");
+                        System.out.println("No hay suficientes unidades disponibles.");
                     }
-                    found = true;
                     break;
                 }
             }
-
             if (!found) {
                 System.out.println("Material no encontrado.");
             }
-
         } catch (Exception e) {
-            System.out.println("Ocurrio un error al registrar el prestamo: " + e.getMessage());
+            System.out.println("Error al registrar el prestamo: " + e.getMessage());
         }
     }
 
@@ -107,8 +104,9 @@ public class ManagementMaterials {
                 Material material = this.mMaterial[i][0];
                 if (material != null && material.getIdentifier().equals(identifier)) {
                     material.setCurrentQuantity(material.getCurrentQuantity() + 1);
-                    System.out.println("Devolucion registrada exitosamente. Cantidad disponible actualizada.");
+                    System.out.println("\nDevolucion registrada exitosamente. Cantidad disponible actualizada.");
                     found = true;
+                    overwriteMaterialFile(); // Actualizar archivo
                     break;
                 }
             }
@@ -172,6 +170,26 @@ public class ManagementMaterials {
             writer.write("---------------------------------------\n");
         } catch (IOException e) {
             System.out.println("Ocurrio un error al guardar el material: " + e.getMessage());
+        }
+    }
+
+    // Metodo para sobrescribir el archivo con la informacion actualizada de la matriz
+    private void overwriteMaterialFile() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("materiales.txt"))) {
+            for (int i = 0; i < this.mMaterial.length; i++) {
+                Material material = this.mMaterial[i][0];
+                if (material != null) {
+                    writer.write("Identificador: " + material.getIdentifier() + "\n");
+                    writer.write("Tipo de Material: " + material.getTypeMaterial() + "\n");
+                    writer.write("Titulo: " + material.getTitle() + "\n");
+                    writer.write("Fecha de Registro: " + material.getRegistrationDate() + "\n");
+                    writer.write("Cantidad Registrada: " + material.getRegisteredAmount() + "\n");
+                    writer.write("Cantidad Actual: " + material.getCurrentQuantity() + "\n");
+                    writer.write("---------------------------------------\n");
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Ocurrio un error al sobrescribir el archivo: " + e.getMessage());
         }
     }
 

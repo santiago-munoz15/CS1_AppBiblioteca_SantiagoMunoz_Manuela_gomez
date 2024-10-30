@@ -8,72 +8,17 @@ package com.mycompany.appbiblioteca;
  *
  * @author santiago.munoz
  */
-public class Material {
+public class Material extends LibraryItem {
 
-    String identifier;
-    String title;
-    String registrationDate;
-    String typeMaterial;
-    int registeredAmount;
-    int currentQuantity;
+    private String typeMaterial;
 
-    //Metodo constructor
-    public Material(String identifier, String title, String typeMaterial, String registrationDate, int registeredAmount, int currentQuantity) {
-        this.identifier = identifier;
-        this.title = title;
-        this.typeMaterial = typeMaterial;
-        this.registrationDate = registrationDate;
-        this.registeredAmount = registeredAmount;
-        this.currentQuantity = currentQuantity;
-    }
-
-    //Setters y Getters
-    public String getIdentifier() {
-        return identifier;
-    }
-
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getRegistrationDate() {
-        return registrationDate;
-    }
-
-    public void setRegistrationDate(String registrationDate) {
-        this.registrationDate = registrationDate;
-    }
-
-    public int getRegisteredAmount() {
-        return registeredAmount;
-    }
-
-    public void setRegisteredAmount(int registeredAmount) {
-        this.registeredAmount = registeredAmount;
-    }
-
-    public int getCurrentQuantity() {
-        return currentQuantity;
-    }
-
-    public void setCurrentQuantity(int currentQuantity) {
-        this.currentQuantity = currentQuantity;
-    }
-
-    public String getTypeMaterial() {
-        return typeMaterial;
-    }
-
-    public void setTypeMaterial(String typeMaterial) {
+    public Material(String identifier, String typeMaterial, String title, String registrationDate, int registeredAmount, int currentQuantity) {
+        super(identifier, typeMaterial, title, registrationDate, registeredAmount, currentQuantity);
         this.typeMaterial = typeMaterial;
     }
 
+    @Override
+    public void displayInfo() {
+        System.out.println("ID: " + identifier + " Tipo de Material: " + typeMaterial + " Titulo: " + title + " Cantidad actual: " + currentQuantity);
+    }
 }
